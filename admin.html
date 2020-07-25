@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Hotel Management System</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <div class="container ">
+            <a class="navbar-brand text-white" href="#">Hotel Management System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link text-white" href="admin.html">Admin Panel<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="user.html">User Panel</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="jumbotron jumbotron-fluid bg-info" style="background-image: url('img/hotel2.jpg'); background-size: cover; height: 450px;">
+        <div class="container pt-5">
+            <h1 class="display-2 text-center text-black">Welcome</h1>
+            <p class="display-4 text-center text-black" id="confirmation">Sign in as a Admin? <br>
+                <button type="button" class="btn btn-primary" id="signInAdmin">Confirm</button>
+            </p>
+            <div id="adminConfirm" class="display-3 text-center text-black"></div>
+        </div>
+    </div>
+
+    <section class="col-lg-8 col-md-10 mx-auto">
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" id="getAllHotels" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          <h2>Get All Hotels </h2>  
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="pageloader"></div>
+                        <div class="row">
+                            <table class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Hotel Id</th>
+                                        <th scope="col">Hotel Name</th>
+                                        <th scope="col">Star Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hotels">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                           <h2>Create Hotels</h2> 
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div id="hotelInfo">
+                            <p>Hotel Name: <input type="text" id="hotel_name"></p>
+                            <p>Star Rating: <input type="text" id="star_rating"></p>
+                            <button type="submit" class="btn btn-primary" id="createHotel">Create</button>
+                        </div>
+
+                        <div id="message1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingThree">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <h2>Create Hotel Details</h2>  
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div id="hotelDetails">
+                            <p>Hotel ID: <input type="number" id="hotel_id" required></p>
+                            <p>Country: <input type="text" id="country" required></p>
+                            <p>City: <input type="text" id="city" required></p>
+                            <p>State: <input type="text" id="state" required></p>
+                            <p>Location: <input type="text" id="location" required></p>
+                            <p>Zip Code: <input type="number" id="zip_code" required></p>
+                            <button type="submit" class="btn btn-primary" id="createHotelDetails">Submit</button>
+                        </div>
+
+
+                        <div id="message2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" id="getAllRooms" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            <h2>Get All Rooms</h2>    
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseFour" class="collapse " aria-labelledby="headingFour" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="pageloader"></div>
+                        <div class="row">
+                            <table class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Room Id</th>
+                                        <th scope="col">Hotel Id</th>
+                                        <th scope="col">Room Number</th>
+                                        <th scope="col">Room Type</th>
+                                        <th scope="col">Floor No</th>
+                                        <th scope="col">Rent</th>
+                                        <th scope="col">Smoking Zone</th>
+                                        <th scope="col">Reservation Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="Rooms">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingFive">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            <h2> Create Rooms</h2>   
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive">
+                    <div class="card-body">
+                        <div id="RoomInfo">
+                            <p>Room Number: <input type="number" id="room_number" required></p>
+                            <p>Hotel Id: <input type="number" id="hotelId" required></p>
+                            <p>Room Type: <input type="text" id="room_type" required></p>
+                            <p>Rent: <input type="number" id="rent" required></p>
+                            <p>Floor No: <input type="number" id="floor_no" required></p>
+                            <p>Smoking Zone: <input type="boolean" id="smoking_zone" required></p>
+                            <p>Attach Image: <input type="file" id="attach_picture" required></p>
+                            <button type="submit" class="btn btn-primary" id="createRoom">Submit</button>
+                        </div>
+
+
+                        <div id="message3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingSix">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            <h2> Booking: Check in Room</h2>   
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div id="checkInRoomInfo">
+                            <p>Room ID: <input type="text" id="room_id" required></p>
+                            <p>Check-In: <input type="date" id="check_in" required></p>
+                            <p>Duration of Stay: <input type="text" id="duration_of_stay" required></p>
+                            <p>Paid Amount: <input type="text" id="paid_amount" required></p>
+                            <button type="submit" class="btn btn-primary" id="checkInRoom">Submit</button>
+                        </div>
+
+
+                        <div id="message4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingSeven">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" id="getUserRevenueInfo" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            <h2>Income: Get User Revenue Info</h2>    
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven">
+                    <div class="card-body">
+                        <div class="pageloader"></div>
+                        <div id="userRevenueInfo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingEight">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" id="getUserExpenditureInfo" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                            <h2>History: Get User Expenditure Info</h2>   
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseEight" class="collapse" aria-labelledby="headingEight">
+                    <div class="card-body">
+                        <div class="pageloader"></div>
+                        <div id="userExpenditureInfo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <p class="copyright text-muted text-center">Copyright &copy; Your Website 2020</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
