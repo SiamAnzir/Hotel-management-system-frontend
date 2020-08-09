@@ -1,22 +1,32 @@
 $(document).ready(function() {
 
-    function ajaxWrapper(method, url, successFun, headers, data) {
+    const localApiUrl = 'http://127.0.0.1:8000/api/';
+
+    const adminToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek';
+
+    const adminHeaders = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer ' + adminToken,
+        'Accept': 'application/json'
+    };
+
+    function ajaxWrapper(method, url, successFunction, headers, data) {
         $.ajax({
             method: method,
             url: url,
             data: data,
             headers: headers,
-            success: successFun,
+            success: successFunction,
             error: function(error) {
                 console.log(error);
-                alert('Sorry, something went wrong. Try Again');
+                alert(error.responseJSON.message);
             }
         });
     }
 
     $('#signInAdmin').on('click', function() {
         let method = 'POST';
-        let url = 'http://127.0.0.1:8000/api/sign-in';
+        let url = localApiUrl + 'sign-in';
         let data = {
             'email': 'anzir@gmail.com',
             'password': '12345678',
@@ -25,18 +35,17 @@ $(document).ready(function() {
         };
         let headers = null;
 
-        function successFun1(result) {
-            console.log(result);
-            $('#adminConfirm').html(result.message);
-            $("#confirmation").hide()
-
+        function adminSignInSuccess(result) {
+            injectSignInResponseInUi(result, 'adminConfirm');
         }
-        ajaxWrapper(method, url, successFun1, headers, data);
+
+
+        ajaxWrapper(method, url, adminSignInSuccess, headers, data);
     });
 
     $('#signInUser').on('click', function() {
         let method = 'POST';
-        let url = 'http://127.0.0.1:8000/api/sign-in';
+        let url = localApiUrl + 'sign-in';
         let data = {
             'email': 'siam@gmail.com',
             'password': '12345678',
@@ -45,57 +54,41 @@ $(document).ready(function() {
         };
         let headers = null;
 
-        function successFun2(result) {
-            console.log(result);
-            $('#userConfirm').html(result.message);
-            $("#confirmation").hide();
-
+        function userSignInSuccess(result) {
+            injectSignInResponseInUi(result, 'userConfirm');
         }
-        ajaxWrapper(method, url, successFun2, headers, data);
+        ajaxWrapper(method, url, userSignInSuccess, headers, data);
     });
 
     $('#createHotel').on('click', function() {
-        var $hotel_name = $('#hotel_name');
-        var $star_rating = $('#star_rating');
+        let $hotel_name = $('#hotel_name');
+        let $star_rating = $('#star_rating');
 
         let method = 'POST';
-        let url = 'http://127.0.0.1:8000/api/create-hotel';
+        let url = localApiUrl + 'create-hotel';
         let data = {
             'name': $hotel_name.val(),
             'star_rating': $star_rating.val()
         }
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
+        let headers = adminHeaders;
+
+        function createHotelSuccess(result) {
+            createHotelResponseUi(result);
         }
 
-        function successFun3(result) {
-            console.log(result);
-            $('#message1').html(result.message + '<br>' + '<button type="submit" class="btn btn-primary" id="createAgain">Create Again</button>').show();
-            $("#hotelInfo").hide();
-
-            $('#createAgain').on('click', function() {
-                $("#hotelInfo").show();
-                $("#message1").hide();
-                $("#hotel_name").val('');
-                $("#star_rating").val('');
-            });
-        }
-
-        ajaxWrapper(method, url, successFun3, headers, data);
+        ajaxWrapper(method, url, createHotelSuccess, headers, data);
     });
 
     $('#createHotelDetails').on('click', function() {
-        var $hotel_id = $('#hotel_id');
-        var $country = $('#country');
-        var $city = $('#city');
-        var $state = $('#state');
-        var $location = $('#location');
-        var $zip_code = $('#zip_code');
+        let $hotel_id = $('#hotel_id');
+        let $country = $('#country');
+        let $city = $('#city');
+        let $state = $('#state');
+        let $location = $('#location');
+        let $zip_code = $('#zip_code');
 
         let method = 'POST';
-        let url = 'http://127.0.0.1:8000/api/create-hotel-details';
+        let url = localApiUrl + 'create-hotel-details';
         let data = {
             'hotel_id': $hotel_id.val(),
             'country': $country.val(),
@@ -104,35 +97,18 @@ $(document).ready(function() {
             'location': $location.val(),
             'zip_code': $zip_code.val()
         }
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
-        }
+        let headers = adminHeaders;
 
-        function successFun4(result) {
-            console.log(result);
-            $('#message2').html(result.message + '<br>' + '<button type="submit" class="btn btn-primary" id="createAgain">Create Again</button>').show();
-            $("#hotelDetails").hide();
-
-            $('#createAgain').on('click', function() {
-                $("#hotelDetails").show();
-                $("#message2").hide();
-                $("#hotel_id").val('');
-                $("#country").val('');
-                $("#city").val('');
-                $("#state").val('');
-                $("#location").val('');
-                $("#zip_code").val('');
-            });
+        function createHotelDetailsSuccess(result) {
+            createHotelDetailsResponseUi(result);
         }
-        ajaxWrapper(method, url, successFun4, headers, data);
+        ajaxWrapper(method, url, createHotelDetailsSuccess, headers, data);
     });
 
     $('#createRoom').on('click', function() {
 
         let method = 'POST';
-        let url = 'http://127.0.0.1:8000/api/create-room';
+        let url = localApiUrl + 'create-room';
         let data = {
             'room_number': $('#room_number').val(),
             'hotel_id': $('#hotelId').val(),
@@ -142,131 +118,77 @@ $(document).ready(function() {
             'smoking_zone': $('#smoking_zone').val(),
             'picture': $('#attach_picture').val()
         }
-        let headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek'
+        let headers = adminHeaders;
+
+        function createRoomSuccess(result) {
+            createRoomResponseUi(result);
         }
-
-        function successFun5(result) {
-            console.log(result);
-            $('#message3').html(result.message);
-
-        }
-        ajaxWrapper(method, url, successFun5, headers, data);
-
-        console.log($('#room_number').val());
-        console.log($('#hotelId').val());
-        console.log($('#room_type').val());
-        console.log($('#rent').val());
-        console.log($('#floor_no').val());
-        console.log($('#smoking_zone').val());
-        console.log($('#attach_picture').val());
+        ajaxWrapper(method, url, createRoomSuccess, headers, data);
 
     });
 
     $('#getAllHotels').on('click', function() {
         let method = 'GET';
-        let url = 'http://127.0.0.1:8000/api/get-all-hotel';
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
-        };
+        let url = localApiUrl + 'get-all-hotel';
+        let headers = adminHeaders;
 
-        function successFun6(result) {
-            console.log(result);
-            getAllHotel(result.data);
-
+        function getAllHotelsSuccess(result) {
+            getHotelsResponseUi(result);
         }
-        ajaxWrapper(method, url, successFun6, headers);
+        ajaxWrapper(method, url, getAllHotelsSuccess, headers);
     });
 
     $('#getAllRooms').on('click', function() {
         let method = 'GET';
-        let url = 'http://127.0.0.1:8000/api/get-all-room';
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
-        };
+        let url = localApiUrl + 'get-all-room';
+        let headers = adminHeaders;
 
-        function successFun7(result) {
-            console.log(result);
-            getAllRoom(result.data);
-
+        function getAllRoomsSuccess(result) {
+            getRoomsResponseUi(result);
         }
-        ajaxWrapper(method, url, successFun7, headers);
+        ajaxWrapper(method, url, getAllRoomsSuccess, headers);
     });
 
     $('#checkInRoom').on('click', function() {
 
         let method = 'POST';
-        let url = 'http://127.0.0.1:8000/api/check-in-room';
+        let url = localApiUrl + 'check-in-room';
         let data = {
             'room_id': $('#room_id').val(),
             'check_in': $('#check_in').val(),
             'duration_of_stay': $('#duration_of_stay').val(),
             'paid_amount': $('#paid_amount').val()
         }
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
-        }
+        let headers = adminHeaders;
 
-        function successFun8(result) {
-            console.log(result);
-            $('#message4').html(result.message + '<br>' + '<button type="submit" class="btn btn-primary" id="showAgain">Show Again</button>').show();
-            $("#checkInRoomInfo").hide();
-
-            $('#showAgain').on('click', function() {
-                $("#checkInRoomInfo").show();
-                $("#message4").hide();
-                $("#room_id").val('');
-                $("#check_in").val('');
-                $("#duration_of_stay").val('');
-                $("#paid_amount").val('');
-            });
+        function checkInRoomSuccess(result) {
+            checkInRoomResponseUi(result);
         }
-        ajaxWrapper(method, url, successFun8, headers, data);
+        ajaxWrapper(method, url, checkInRoomSuccess, headers, data);
     });
 
     $('#getUserRevenueInfo').on('click', function() {
 
         let method = 'GET';
-        let url = 'http://127.0.0.1:8000/api/get-user-revenue-info?';
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
-        }
+        let url = localApiUrl + 'get-user-revenue-info?';
+        let headers = adminHeaders;
 
-        function successFun9(result) {
-            console.log(result);
-            $('#userRevenueInfo').html(result.message);
-            $(".pageloader").fadeOut("slow");
+        function getRevenueInfoSuccess(result) {
+            injectGetResponseUi(result, 'userRevenueInfo');
         }
-        ajaxWrapper(method, url, successFun9, headers);
+        ajaxWrapper(method, url, getRevenueInfoSuccess, headers);
     });
 
     $('#getUserExpenditureInfo').on('click', function() {
 
         let method = 'GET';
-        let url = 'http://127.0.0.1:8000/api/get-expenditure-info';
-        let headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek',
-            'Accept': 'application/json'
-        }
+        let url = localApiUrl + 'get-expenditure-info';
+        let headers = adminHeaders;
 
-        function successFun10(result) {
-            console.log(result);
-            $('#userExpenditureInfo').html(result.message);
-            $(".pageloader").fadeOut("slow");
-
+        function getExpenditureInfoSuccess(result) {
+            injectGetResponseUi(result, 'userExpenditureInfo');
         }
-        ajaxWrapper(method, url, successFun10, headers);
+        ajaxWrapper(method, url, getExpenditureInfoSuccess, headers);
     });
 
     function getAllHotel(hotel) {
@@ -311,4 +233,75 @@ $(document).ready(function() {
         $('#Rooms').html(allRooms);
     }
 
+    function injectSignInResponseInUi(result, elementId) {
+        console.log(result);
+        $('#' + elementId).html(result.message);
+        $("#confirmation").hide()
+    }
+
+    function createHotelResponseUi(result) {
+        console.log(result);
+        $('#createHotelResponse').html(result.message + '<br>' + '<button type="submit" class="btn btn-primary" id="createAgain">Create Again</button>').show();
+        $("#hotelInfo").hide();
+
+        $('#createAgain').on('click', function() {
+            $("#hotelInfo").show();
+            $("#createHotelResponse").hide();
+            $("#hotel_name").val('');
+            $("#star_rating").val('');
+        });
+    }
+
+    function createHotelDetailsResponseUi(result) {
+        console.log(result);
+        $('#createHotelDetailsResponse').html(result.message + '<br>' + '<button type="submit" class="btn btn-primary" id="createAgain">Create Again</button>').show();
+        $("#hotelDetails").hide();
+
+        $('#createAgain').on('click', function() {
+            $("#hotelDetails").show();
+            $("#createHotelDetailsResponse").hide();
+            $("#hotel_id").val('');
+            $("#country").val('');
+            $("#city").val('');
+            $("#state").val('');
+            $("#location").val('');
+            $("#zip_code").val('');
+        });
+    }
+
+    function createRoomResponseUi(result) {
+        console.log(result);
+        $('#createRoomResponse').html(result.message);
+    }
+
+    function getHotelsResponseUi(result) {
+        console.log(result);
+        getAllHotel(result.data);
+    }
+
+    function getRoomsResponseUi(result) {
+        console.log(result);
+        getAllRoom(result.data);
+    }
+
+    function checkInRoomResponseUi(result) {
+        console.log(result);
+        $('#checkInRoomResponse').html(result.message + '<br>' + '<button type="submit" class="btn btn-primary" id="showAgain">Show Again</button>').show();
+        $("#checkInRoomInfo").hide();
+
+        $('#showAgain').on('click', function() {
+            $("#checkInRoomInfo").show();
+            $("#checkInRoomResponse").hide();
+            $("#room_id").val('');
+            $("#check_in").val('');
+            $("#duration_of_stay").val('');
+            $("#paid_amount").val('');
+        });
+    }
+
+    function injectGetResponseUi(result, elementId) {
+        console.log(result);
+        $('#' + elementId).html(result.message);
+        $(".pageloader").fadeOut("slow");
+    }
 })
