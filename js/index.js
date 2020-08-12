@@ -2,15 +2,15 @@ $(document).ready(function() {
 
     const localApiUrl = 'http://127.0.0.1:8000/api/';
 
-    const adminToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek';
+    localStorage.setItem("adminToken", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZmYTNjYjAzN2IzZGZmMmNmMDliYzhlYWFhYzM2YTgxMjgzZTQxM2YwNTRiOTdjNDU2YjA5MGI5NWI1OWI4MmQ0ZWRlYzRjYzEwNTVlM2RjIn0.eyJhdWQiOiIxIiwianRpIjoiZmZhM2NiMDM3YjNkZmYyY2YwOWJjOGVhYWFjMzZhODEyODNlNDEzZjA1NGI5N2M0NTZiMDkwYjk1YjU5YjgyZDRlZGVjNGNjMTA1NWUzZGMiLCJpYXQiOjE1OTM2MzMwMDksIm5iZiI6MTU5MzYzMzAwOSwiZXhwIjoxNjI1MTY5MDA5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.sd8smQYIOxzghiqCxmdny0O-j60tnbvFxqYDKEEHnqBuNy_NuCM3g_9zcsyHFuz_A-iCg4sU2J8LrDR-Zik0iXB8RvXAEhPZcqKdi8gjNH_FMrFWByX2RM8R2CoCKKk67bMqGUcNnnbJ1iStHGuYKQjtWibkC6EtEmtX9pHMTsVdH3UoRfI3kJF_Q0jzQPvMrjkk9DvYKqmUM7XWPkzeIxiy8RPgbLrrpEBW7w-DW0y65VjTH5rGCMQ-h2maCoOaiZBIFv9r0NC8Z53aPwVw3D0fjs-axgqcEJhstHVZnykxML-V1JGlmstBTTsJqjJaldg1R3TB9ON2zFTnpLt31MTyJZxxtKNj2_SmC5PHOsxQAH9X5Kf3V_FgFtEwXlqMBS10kHcUNqkCbAZU50DUx5-UmmnJb0DPDzLFFg760kzTigXmufg8P_Ny9ivtyaf-h-ayXrbtZftrqy6gEDoCviBkGRl1O9mQycPJkp2SdiW8BNjsY77NS6iBtbZjWOYXEYpoyYJHiyQoBBVlaa7_9q8p-VPNI7qkzQ11g1XtO5efgrjDXvJ0g_HTosZQt2hsXUswkZEzRgAI8H_HQ4aD32fEiW9WjjpKAmYRElsvzceNpGgkiaIX3LzOrvYJ4NmI6l3vVPtkV_3glDhOUU-8h4xhaMcOhsc90yYXxm-scek");
 
     const adminHeaders = {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Bearer ' + adminToken,
+        'Authorization': 'Bearer ' + localStorage.getItem("adminToken"),
         'Accept': 'application/json'
     };
 
-    function ajaxWrapper(method, url, successFunction, headers, data) {
+    function ajaxWrapper(method, url, successFunction, errorFunction, headers, data) {
         $.ajax({
             method: method,
             url: url,
