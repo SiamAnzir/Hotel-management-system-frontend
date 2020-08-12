@@ -17,10 +17,7 @@ $(document).ready(function() {
             data: data,
             headers: headers,
             success: successFunction,
-            error: function(error) {
-                console.log(error);
-                alert(error.responseJSON.message);
-            }
+            error: errorFunction
         });
     }
 
@@ -39,8 +36,7 @@ $(document).ready(function() {
             injectSignInResponseInUi(result, 'adminConfirm');
         }
 
-
-        ajaxWrapper(method, url, adminSignInSuccess, headers, data);
+        ajaxWrapper(method, url, adminSignInSuccess, errorResult, headers, data);
     });
 
     $('#signInUser').on('click', function() {
@@ -57,7 +53,7 @@ $(document).ready(function() {
         function userSignInSuccess(result) {
             injectSignInResponseInUi(result, 'userConfirm');
         }
-        ajaxWrapper(method, url, userSignInSuccess, headers, data);
+        ajaxWrapper(method, url, userSignInSuccess, errorResult, headers, data);
     });
 
     $('#createHotel').on('click', function() {
@@ -76,7 +72,7 @@ $(document).ready(function() {
             createHotelResponseUi(result);
         }
 
-        ajaxWrapper(method, url, createHotelSuccess, headers, data);
+        ajaxWrapper(method, url, createHotelSuccess, errorResult, headers, data);
     });
 
     $('#createHotelDetails').on('click', function() {
@@ -102,7 +98,7 @@ $(document).ready(function() {
         function createHotelDetailsSuccess(result) {
             createHotelDetailsResponseUi(result);
         }
-        ajaxWrapper(method, url, createHotelDetailsSuccess, headers, data);
+        ajaxWrapper(method, url, createHotelDetailsSuccess, errorResult, headers, data);
     });
 
     $('#createRoom').on('click', function() {
@@ -123,7 +119,7 @@ $(document).ready(function() {
         function createRoomSuccess(result) {
             createRoomResponseUi(result);
         }
-        ajaxWrapper(method, url, createRoomSuccess, headers, data);
+        ajaxWrapper(method, url, createRoomSuccess, errorResult, headers, data);
 
     });
 
@@ -135,7 +131,7 @@ $(document).ready(function() {
         function getAllHotelsSuccess(result) {
             getHotelsResponseUi(result);
         }
-        ajaxWrapper(method, url, getAllHotelsSuccess, headers);
+        ajaxWrapper(method, url, getAllHotelsSuccess, errorResult, headers);
     });
 
     $('#getAllRooms').on('click', function() {
@@ -146,7 +142,7 @@ $(document).ready(function() {
         function getAllRoomsSuccess(result) {
             getRoomsResponseUi(result);
         }
-        ajaxWrapper(method, url, getAllRoomsSuccess, headers);
+        ajaxWrapper(method, url, getAllRoomsSuccess, errorResult, headers);
     });
 
     $('#checkInRoom').on('click', function() {
@@ -164,7 +160,7 @@ $(document).ready(function() {
         function checkInRoomSuccess(result) {
             checkInRoomResponseUi(result);
         }
-        ajaxWrapper(method, url, checkInRoomSuccess, headers, data);
+        ajaxWrapper(method, url, checkInRoomSuccess, errorResult, headers, data);
     });
 
     $('#getUserRevenueInfo').on('click', function() {
@@ -176,7 +172,7 @@ $(document).ready(function() {
         function getRevenueInfoSuccess(result) {
             injectGetResponseUi(result, 'userRevenueInfo');
         }
-        ajaxWrapper(method, url, getRevenueInfoSuccess, headers);
+        ajaxWrapper(method, url, getRevenueInfoSuccess, errorResult, headers);
     });
 
     $('#getUserExpenditureInfo').on('click', function() {
@@ -188,7 +184,7 @@ $(document).ready(function() {
         function getExpenditureInfoSuccess(result) {
             injectGetResponseUi(result, 'userExpenditureInfo');
         }
-        ajaxWrapper(method, url, getExpenditureInfoSuccess, headers);
+        ajaxWrapper(method, url, getExpenditureInfoSuccess, errorResult, headers);
     });
 
     function getAllHotel(hotel) {
@@ -303,5 +299,10 @@ $(document).ready(function() {
         console.log(result);
         $('#' + elementId).html(result.message);
         $(".pageloader").fadeOut("slow");
+    }
+
+    function errorResult(error) {
+        console.log(error);
+        alert(error.responseJSON.message);
     }
 })
