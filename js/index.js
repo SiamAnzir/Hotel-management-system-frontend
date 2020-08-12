@@ -32,11 +32,7 @@ $(document).ready(function() {
         };
         let headers = null;
 
-        function adminSignInSuccess(result) {
-            injectSignInResponseInUi(result, 'adminConfirm');
-        }
-
-        ajaxWrapper(method, url, adminSignInSuccess, errorResult, headers, data);
+        ajaxWrapper(method, url, injectAdminSignInResponseInUi, errorResult, headers, data);
     });
 
     $('#signInUser').on('click', function() {
@@ -50,10 +46,7 @@ $(document).ready(function() {
         };
         let headers = null;
 
-        function userSignInSuccess(result) {
-            injectSignInResponseInUi(result, 'userConfirm');
-        }
-        ajaxWrapper(method, url, userSignInSuccess, errorResult, headers, data);
+        ajaxWrapper(method, url, injectUserdminSignInResponseInUi, errorResult, headers, data);
     });
 
     $('#createHotel').on('click', function() {
@@ -68,11 +61,7 @@ $(document).ready(function() {
         }
         let headers = adminHeaders;
 
-        function createHotelSuccess(result) {
-            createHotelResponseUi(result);
-        }
-
-        ajaxWrapper(method, url, createHotelSuccess, errorResult, headers, data);
+        ajaxWrapper(method, url, createHotelResponseUi, errorResult, headers, data);
     });
 
     $('#createHotelDetails').on('click', function() {
@@ -95,10 +84,7 @@ $(document).ready(function() {
         }
         let headers = adminHeaders;
 
-        function createHotelDetailsSuccess(result) {
-            createHotelDetailsResponseUi(result);
-        }
-        ajaxWrapper(method, url, createHotelDetailsSuccess, errorResult, headers, data);
+        ajaxWrapper(method, url, createHotelDetailsResponseUi, errorResult, headers, data);
     });
 
     $('#createRoom').on('click', function() {
@@ -116,10 +102,7 @@ $(document).ready(function() {
         }
         let headers = adminHeaders;
 
-        function createRoomSuccess(result) {
-            createRoomResponseUi(result);
-        }
-        ajaxWrapper(method, url, createRoomSuccess, errorResult, headers, data);
+        ajaxWrapper(method, url, createRoomResponseUi, errorResult, headers, data);
 
     });
 
@@ -128,10 +111,7 @@ $(document).ready(function() {
         let url = localApiUrl + 'get-all-hotel';
         let headers = adminHeaders;
 
-        function getAllHotelsSuccess(result) {
-            getHotelsResponseUi(result);
-        }
-        ajaxWrapper(method, url, getAllHotelsSuccess, errorResult, headers);
+        ajaxWrapper(method, url, getHotelsResponseUi, errorResult, headers);
     });
 
     $('#getAllRooms').on('click', function() {
@@ -139,10 +119,7 @@ $(document).ready(function() {
         let url = localApiUrl + 'get-all-room';
         let headers = adminHeaders;
 
-        function getAllRoomsSuccess(result) {
-            getRoomsResponseUi(result);
-        }
-        ajaxWrapper(method, url, getAllRoomsSuccess, errorResult, headers);
+        ajaxWrapper(method, url, getRoomsResponseUi, errorResult, headers);
     });
 
     $('#checkInRoom').on('click', function() {
@@ -157,10 +134,7 @@ $(document).ready(function() {
         }
         let headers = adminHeaders;
 
-        function checkInRoomSuccess(result) {
-            checkInRoomResponseUi(result);
-        }
-        ajaxWrapper(method, url, checkInRoomSuccess, errorResult, headers, data);
+        ajaxWrapper(method, url, checkInRoomResponseUi, errorResult, headers, data);
     });
 
     $('#getUserRevenueInfo').on('click', function() {
@@ -169,10 +143,7 @@ $(document).ready(function() {
         let url = localApiUrl + 'get-user-revenue-info?';
         let headers = adminHeaders;
 
-        function getRevenueInfoSuccess(result) {
-            injectGetResponseUi(result, 'userRevenueInfo');
-        }
-        ajaxWrapper(method, url, getRevenueInfoSuccess, errorResult, headers);
+        ajaxWrapper(method, url, injectGetResponseUi, errorResult, headers);
     });
 
     $('#getUserExpenditureInfo').on('click', function() {
@@ -181,10 +152,7 @@ $(document).ready(function() {
         let url = localApiUrl + 'get-expenditure-info';
         let headers = adminHeaders;
 
-        function getExpenditureInfoSuccess(result) {
-            injectGetResponseUi(result, 'userExpenditureInfo');
-        }
-        ajaxWrapper(method, url, getExpenditureInfoSuccess, errorResult, headers);
+        ajaxWrapper(method, url, injectGetResponseUi, errorResult, headers);
     });
 
     function getAllHotel(hotel) {
@@ -229,9 +197,15 @@ $(document).ready(function() {
         $('#Rooms').html(allRooms);
     }
 
-    function injectSignInResponseInUi(result, elementId) {
+    function injectAdminSignInResponseInUi(result) {
         console.log(result);
-        $('#' + elementId).html(result.message);
+        $('#adminConfirm').html(result.message);
+        $("#confirmation").hide()
+    }
+
+    function injectUserdminSignInResponseInUi(result) {
+        console.log(result);
+        $('#userConfirm').html(result.message);
         $("#confirmation").hide()
     }
 
